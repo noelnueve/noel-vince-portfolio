@@ -1,7 +1,7 @@
 const pageBody = document.body;
 const themeButtons = document.querySelectorAll("[data-theme]");
-const navLinks = document.querySelectorAll(".nav-links a");
-const sectionNavLinks = [...navLinks].filter((link) => (
+const themeStorageKey = "noel-portfolio-theme";
+const sectionNavLinks = [...document.querySelectorAll(".nav-links a")].filter((link) => (
   link.hash
   && link.origin === window.location.origin
   && link.pathname === window.location.pathname
@@ -9,6 +9,33 @@ const sectionNavLinks = [...navLinks].filter((link) => (
 const trackedSections = sectionNavLinks
   .map((link) => document.querySelector(link.hash))
   .filter(Boolean);
+
+const applyTheme = (theme) => {
+  const useLightTheme = theme === "light";
+
+  pageBody.classList.toggle("light-theme", useLightTheme);
+  themeButtons.forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.theme === theme));
+  });
+};
+
+const getSavedTheme = () => {
+  try {
+    return window.localStorage.getItem(themeStorageKey);
+  } catch {
+    return null;
+  }
+};
+
+const saveTheme = (theme) => {
+  try {
+    window.localStorage.setItem(themeStorageKey, theme);
+  } catch {
+    // Theme remains active for the current page.
+  }
+};
+
+applyTheme(getSavedTheme() === "light" ? "light" : "dark");
 
 document.querySelectorAll("img[data-fallback]").forEach((image) => {
   const showFallback = () => image.classList.add("is-missing");
@@ -22,34 +49,52 @@ document.querySelectorAll("img[data-fallback]").forEach((image) => {
 
 themeButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const useLightTheme = button.dataset.theme === "light";
-    pageBody.classList.toggle("light-theme", useLightTheme);
-    themeButtons.forEach((themeButton) => {
-      themeButton.setAttribute("aria-pressed", String(themeButton === button));
+    const theme = button.dataset.theme;
+
+    applyTheme(theme);
+    saveTheme(theme);
+  });
+});
+
+if (trackedSections.length) {
+  const sectionObserver = new IntersectionObserver((entries) => {
+    const visibleEntry = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
+
+    if (!visibleEntry) return;
+
+    sectionNavLinks.forEach((link) => {
+      link.classList.toggle("active", link.getAttribute("href") === `#${visibleEntry.target.id}`);
     });
+  }, {
+    rootMargin: "-25% 0px -55%",
+    threshold: [0, 0.25, 0.5]
   });
-});
 
-const activeSectionObserver = new IntersectionObserver((entries) => {
-  const visibleEntry = entries
-    .filter((entry) => entry.isIntersecting)
-    .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
+  trackedSections.forEach((section) => sectionObserver.observe(section));
+}
 
-  if (!visibleEntry) return;
-
-  sectionNavLinks.forEach((link) => {
-    link.classList.toggle("active", link.getAttribute("href") === `#${visibleEntry.target.id}`);
-  });
-}, {
-  rootMargin: "-25% 0px -55%",
-  threshold: [0, 0.25, 0.5]
-});
-
-trackedSections.forEach((section) => activeSectionObserver.observe(section));
-
-const contentRevealTargets = document.querySelectorAll(
-  ".section-heading, .detail-title, .detail-description h2, .contribution-panel h2, .detail-section h2, .text-section .lead-copy, .skill-card, .experience-card, .project-card, .education-card, .credential-row, .contact-grid a, .detail-media, p.detail-kicker, .detail-description > p, .metrics-list, .contribution-panel, .detail-section"
-);
+const revealTargets = document.querySelectorAll(`
+  .section-heading,
+  .detail-title,
+  .detail-description h2,
+  .contribution-panel h2,
+  .detail-section h2,
+  .text-section .lead-copy,
+  .skill-card,
+  .experience-card,
+  .project-card,
+  .education-card,
+  .credential-row,
+  .contact-grid a,
+  .detail-media,
+  p.detail-kicker,
+  .detail-description > p,
+  .metrics-list,
+  .contribution-panel,
+  .detail-section
+`);
 
 const getRevealDelay = (target) => {
   const groupedParent = target.parentElement?.matches(
@@ -62,24 +107,24 @@ const getRevealDelay = (target) => {
   return 120 + Math.min(Math.max(siblingIndex, 0) * 70, 210);
 };
 
-contentRevealTargets.forEach((target) => {
+revealTargets.forEach((target) => {
   target.classList.add("content-reveal");
   target.style.setProperty("--reveal-delay", `${getRevealDelay(target)}ms`);
 });
 
-const contentRevealObserver = new IntersectionObserver((entries) => {
+const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
 
     entry.target.classList.add("is-revealed");
-    contentRevealObserver.unobserve(entry.target);
+    revealObserver.unobserve(entry.target);
   });
 }, {
   threshold: 0.2,
   rootMargin: "0px 0px -8%"
 });
 
-contentRevealTargets.forEach((target) => contentRevealObserver.observe(target));
+revealTargets.forEach((target) => revealObserver.observe(target));
 
 const musicDrawer = document.querySelector("#music-drawer");
 
@@ -224,7 +269,7 @@ if (musicDrawer) {
       try {
         spotifyController.pause();
       } catch {
-        // Spotify's own controls remain available when programmatic pause is unavailable.
+        // Native Spotify controls remain available.
       }
     }
 

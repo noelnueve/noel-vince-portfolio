@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Noel V. — Computer Engineer portfolio">
+  <meta name="description" content="Noel V. | Computer Engineer portfolio">
   <title>Noel V. | Computer Engineer</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -31,7 +31,6 @@
   </svg>
 
   <div class="site-shell">
-    <!-- NAVIGATION -->
     <header class="topbar">
       <nav class="nav-wrap" aria-label="Primary navigation">
         <a class="logo" href="#home" aria-label="Noel V. home"><span>//</span> NOEL.V.N</a>
@@ -43,7 +42,6 @@
           <a href="#contact">Contact</a>
         </div>
         <div class="theme-controls" aria-label="Theme controls">
-          <!-- Future animation: add a subtle icon-toggle transition here. -->
           <button class="icon-button" type="button" data-theme="light" aria-label="Use light theme"><svg><use href="#icon-sun"/></svg></button>
           <button class="icon-button" type="button" data-theme="dark" aria-label="Use dark theme"><svg><use href="#icon-moon"/></svg></button>
         </div>
@@ -51,7 +49,6 @@
     </header>
 
     <main>
-      <!-- HERO -->
       <section class="hero" id="home">
         <div class="hero-content">
           <div class="portrait-wrap">
@@ -70,14 +67,13 @@
           </div>
           <div class="hero-copy">
             <h1>It’s Noel,<br>your bug negotiator.</h1>
-            <p>Computer Engineer</p><!-- TODO: swap for target role -->
-            <!-- Optional Spotify Easter egg: player is created only after visitor interaction. -->
+            <p>Computer Engineer</p>
             <section class="music-drawer" id="music-drawer" aria-label="Music player">
               <button class="music-toggle" id="music-toggle" type="button" aria-expanded="false" aria-controls="music-panel">
                 <span aria-hidden="true">♫</span>
                 <span class="music-toggle-text">Need a soundtrack? Play my favorite while you scroll.</span>
               </button>
-                <div class="music-panel" id="music-panel" aria-hidden="true" inert>
+              <div class="music-panel" id="music-panel" aria-hidden="true" inert>
                 <div class="music-now-playing">
                   <div>
                     <span class="music-eyebrow">Now Playing</span>
@@ -100,39 +96,33 @@
           </div>
         </div>
         <div class="hero-actions">
-          <!-- Future animation: add button hover motion here. -->
           <a class="button button-primary" href="#projects">View Projects</a>
-          <a class="button button-outline" href="noelNueve-resume.pdf" download>Download CV</a>
+          <a class="button button-outline" href="assets/resume/noelNueve-resume.pdf" download>Download CV</a>
         </div>
       </section>
 
-      <!-- ABOUT -->
       <section class="content-section text-section" id="about">
-        <!-- Future animation: fade this section in on scroll. -->
         <div class="section-heading">
           <div class="section-index"><span></span><b>01</b></div>
           <h2>About / Objective</h2>
         </div>
-        <p class="lead-copy">To join a growing organization as a Software Developer, where I can apply my technical foundation in software development, embedded systems, and computer vision while continuing to build my skills and contribute meaningfully to the team’s projects and growth.</p>
+        <p class="lead-copy">I’m looking for a Software Developer role where I can apply my background in software development, embedded systems, and computer vision, continue building my skills, and contribute to the team’s projects.</p>
       </section>
 
-      <!-- PROFESSIONAL SUMMARY -->
       <section class="content-section text-section" id="summary">
         <div class="section-heading">
           <div class="section-index"><span></span><b>02</b></div>
           <h2>Professional Summary</h2>
         </div>
-        <p class="lead-copy">Computer Engineering graduate with hands-on experience developing software for real-time embedded and computer-vision systems using Python and C++, experienced in system integration, multithreaded programming, debugging, computer vision, and hardware-software communication. Built and integrated software across Arduino, ESP32, and Raspberry Pi platforms, with a growing focus on professional software development and building reliable applications.</p>
+        <p class="lead-copy">Computer Engineering graduate with hands-on experience building real-time embedded and computer vision systems using Python and C++. My work includes system integration, multithreaded programming, debugging, computer vision, and hardware-software communication across Arduino, ESP32, and Raspberry Pi platforms. I’m now focused on software development and building reliable applications.</p>
       </section>
 
-      <!-- SKILLS -->
       <section class="content-section" id="skills">
         <div class="section-heading heading-with-icon">
           <div class="section-index"><span></span><b>03</b></div>
           <h2>Skills <svg><use href="#icon-code"/></svg></h2>
         </div>
         <div class="skills-grid">
-          <!-- Future animation: stagger skill-card fade-ins here. -->
           <article class="skill-card">
             <h3><svg><use href="#icon-code"/></svg>Programming</h3>
             <div class="tag-list"><span>Python</span><span>C++</span><span>JavaScript</span><span>HTML</span><span>CSS</span><span>React</span><span>Node.js</span></div>
@@ -156,36 +146,35 @@
         </div>
       </section>
 
-      <!-- EXPERIENCE -->
       <section class="content-section" id="experience">
         <div class="section-heading">
           <div class="section-index"><span></span><b>04</b></div>
           <h2>Experience</h2>
         </div>
-        <!-- Future animation: add a restrained card reveal here. -->
         <article class="experience-card">
           <div class="experience-top">
-            <div><h3>Technical Support Intern</h3><p>Universal Access &amp; Systems Solutions (UAS) · Pasig City</p></div>
+            <div>
+              <h3>Technical Support Intern</h3>
+              <p>Universal Access &amp; Systems Solutions (UAS) · Pasig City</p>
+            </div>
             <span class="date-pill">Apr - Jun 2026</span>
           </div>
           <ul>
-            <li>Diagnosed and resolved network and systems issues using structured troubleshooting methods applicable to software debugging and technical problem-solving.</li>
-            <li>Applied systematic root-cause analysis in hands-on network configuration labs (Cisco Packet Tracer), building a disciplined approach to isolating and fixing technical issues.</li>
-            <li>Prepared and delivered a technical presentation to supervisors, demonstrating clear communication of technical concepts to non-technical stakeholders.</li>
+            <li>Diagnosed and resolved network and system issues using structured troubleshooting methods that also apply to software debugging.</li>
+            <li>Completed hands-on Cisco Packet Tracer labs and used root-cause analysis to isolate and fix network configuration issues.</li>
+            <li>Prepared and delivered a technical presentation to supervisors, explaining technical concepts clearly to non-technical stakeholders.</li>
           </ul>
         </article>
       </section>
 
-      <!-- PROJECTS -->
       <section class="content-section" id="projects">
         <div class="section-heading">
           <div class="section-index"><span></span><b>05</b></div>
           <h2>Featured Undergraduate Projects</h2>
         </div>
         <div class="project-grid">
-          <a class="project-card project-card-tela" href="projects/tela-sorb.html" aria-label="View TELA-SORB project details">
+          <a class="project-card" href="projects/tela-sorb.html" aria-label="View TELA-SORB project details">
             <div class="project-image asset-frame">
-              <!-- Swappable asset: assets/projects/tela-sorb.png -->
               <img src="assets/projects/tela-sorb.png" alt="TELA-SORB project" data-fallback="project-placeholder-one">
               <div class="asset-placeholder" id="project-placeholder-one" aria-hidden="true"><svg><use href="#icon-image"/></svg><span>Project Photo</span></div>
             </div>
@@ -196,23 +185,21 @@
               <span class="project-link"><svg><use href="#icon-bookmark"/></svg>Capstone</span>
             </div>
           </a>
-          <a class="project-card project-card-chexam" href="projects/chexam.html" aria-label="View CHEXAM project details">
+          <a class="project-card" href="projects/chexam.html" aria-label="View CHEXAM project details">
             <div class="project-image asset-frame">
-              <!-- Swappable asset: assets/projects/chexam.png -->
               <img src="assets/projects/chexam.png" alt="CHEXAM project" data-fallback="project-placeholder-two">
               <div class="asset-placeholder" id="project-placeholder-two" aria-hidden="true"><svg><use href="#icon-image"/></svg><span>Project Photo</span></div>
             </div>
             <div class="project-body">
               <div class="project-tags"><span>Elective Course Project</span><span>4-Member Team</span></div>
               <h3>CHEXAM: An Offline Automated Exam Checker Device</h3>
-              <p>Developed an offline device capable of automatically checking Multiple Choice, True or False, Identification, and Essay exam formats—reducing manual grading effort and providing instant feedback.</p>
+              <p>Developed an offline device that automatically checks Multiple Choice, True or False, Identification, and Essay exam formats, reducing manual grading effort and providing instant feedback.</p>
               <span class="project-link"><svg><use href="#icon-bookmark"/></svg>MCQ · T/F · ID · Essay</span>
             </div>
           </a>
         </div>
       </section>
 
-      <!-- EDUCATION -->
       <section class="content-section" id="education">
         <div class="section-heading">
           <div class="section-index"><span></span><b>06</b></div>
@@ -220,48 +207,92 @@
         </div>
         <article class="education-card">
           <span class="round-icon"><svg><use href="#icon-graduate"/></svg></span>
-          <div><h3>BS Computer Engineering</h3><p>National University, Fairview, Quezon City</p><span class="year-pill">2022 - 2026</span></div>
+          <div>
+            <h3>BS Computer Engineering</h3>
+            <p>National University, Fairview, Quezon City</p>
+            <span class="year-pill">2022 - 2026</span>
+          </div>
         </article>
       </section>
 
-      <!-- TRAINING & CERTIFICATIONS -->
       <section class="content-section" id="training">
         <div class="section-heading">
           <div class="section-index"><span></span><b>07</b></div>
           <h2>Training &amp; Certifications</h2>
         </div>
         <div class="credential-list">
-          <article class="credential-row"><span class="round-icon"><svg><use href="#icon-shield"/></svg></span><div><h3>CCNA &amp; Cybersecurity Trainee</h3><p>Experts Academy, Metro Manila · March-May, 2022-2026</p><p>Hands-on configuration and scripting labs covering TCP/IP, subnetting, VLANs, and ACLs.</p></div></article>
-          <article class="credential-row"><span class="round-icon"><svg><use href="#icon-badge"/></svg></span><div><h3>Fortinet NSE1</h3><p>Fortinet · 2026</p></div></article>
-          <article class="credential-row"><span class="round-icon"><svg><use href="#icon-bolt"/></svg></span><div><h3>Certificate of Participation: AI for Public Good</h3><p>AI for Impact Prompt Engineering Workshop · Cognizant · August 29, 2025</p></div></article>
+          <article class="credential-row">
+            <span class="round-icon"><svg><use href="#icon-shield"/></svg></span>
+            <div>
+              <h3>CCNA &amp; Cybersecurity Trainee</h3>
+              <p>Experts Academy, Metro Manila · March-May, 2022-2026</p>
+              <p>Hands-on configuration and scripting labs covering TCP/IP, subnetting, VLANs, and ACLs.</p>
+            </div>
+          </article>
+          <article class="credential-row">
+            <span class="round-icon"><svg><use href="#icon-badge"/></svg></span>
+            <div>
+              <h3>Fortinet NSE1</h3>
+              <p>Fortinet · 2026</p>
+            </div>
+          </article>
+          <article class="credential-row">
+            <span class="round-icon"><svg><use href="#icon-bolt"/></svg></span>
+            <div>
+              <h3>Certificate of Participation: AI for Public Good</h3>
+              <p>AI for Impact Prompt Engineering Workshop · Cognizant · August 29, 2025</p>
+            </div>
+          </article>
         </div>
       </section>
 
-      <!-- AWARDS -->
       <section class="content-section" id="awards">
         <div class="section-heading">
           <div class="section-index"><span></span><b>08</b></div>
           <h2>Awards</h2>
         </div>
         <div class="credential-list awards-list">
-          <article class="credential-row"><span class="round-icon"><svg><use href="#icon-trophy"/></svg></span><div><h3>Academic Excellence Award - Top 8 Student</h3><p>Fourth Year Level, Second Term A.Y. 2025-2026 · GWA: 2.75</p></div></article>
-          <article class="credential-row"><span class="round-icon"><svg><use href="#icon-star"/></svg></span><div><h3>Dean's Lister, Second Honor</h3><p>First Term A.Y. 2022-2023 · Rank 1, BS Computer Engineering</p></div></article>
+          <article class="credential-row">
+            <span class="round-icon"><svg><use href="#icon-trophy"/></svg></span>
+            <div>
+              <h3>Academic Excellence Award - Top 8 Student</h3>
+              <p>Fourth Year Level, Second Term A.Y. 2025-2026 · GWA: 2.75</p>
+            </div>
+          </article>
+          <article class="credential-row">
+            <span class="round-icon"><svg><use href="#icon-star"/></svg></span>
+            <div>
+              <h3>Dean's Lister, Second Honor</h3>
+              <p>First Term A.Y. 2022-2023 · Rank 1, BS Computer Engineering</p>
+            </div>
+          </article>
         </div>
       </section>
 
-      <!-- CONTACT -->
       <section class="content-section contact-section" id="contact">
         <div class="section-heading">
           <div class="section-index"><span></span><b>09</b></div>
           <h2>Contact</h2>
         </div>
         <div class="contact-grid">
-          <a href="mailto:noel.nueve30@gmail.com"><span class="round-icon"><svg><use href="#icon-mail"/></svg></span><div><b>Email</b><small>noel.nueve30@gmail.com</small></div></a>
-          <a href="tel:+639668351070"><span class="round-icon"><svg><use href="#icon-phone"/></svg></span><div><b>Phone</b><small>+63 966 835 1070</small></div></a>
-          <a href="https://github.com/noelnueve" target="_blank" rel="noreferrer"><span class="round-icon"><svg><use href="#icon-github"/></svg></span><div><b>GitHub</b><small>github.com/noelnueve</small></div></a>
-          <a href="https://www.linkedin.com/in/noelnueve" target="_blank" rel="noreferrer"><span class="round-icon"><svg><use href="#icon-linkedin"/></svg></span><div><b>LinkedIn</b><small>linkedin.com/in/noelnueve</small></div></a>
+          <a href="mailto:noel.nueve30@gmail.com">
+            <span class="round-icon"><svg><use href="#icon-mail"/></svg></span>
+            <div><b>Email</b><small>noel.nueve30@gmail.com</small></div>
+          </a>
+          <a href="tel:+639668351070">
+            <span class="round-icon"><svg><use href="#icon-phone"/></svg></span>
+            <div><b>Phone</b><small>+63 966 835 1070</small></div>
+          </a>
+          <a href="https://github.com/noelnueve" target="_blank" rel="noreferrer">
+            <span class="round-icon"><svg><use href="#icon-github"/></svg></span>
+            <div><b>GitHub</b><small>github.com/noelnueve</small></div>
+          </a>
+          <a href="https://www.linkedin.com/in/noelnueve" target="_blank" rel="noreferrer">
+            <span class="round-icon"><svg><use href="#icon-linkedin"/></svg></span>
+            <div><b>LinkedIn</b><small>linkedin.com/in/noelnueve</small></div>
+          </a>
         </div>
-        <a class="button button-outline contact-download" href="noelNueve-resume.pdf" download>Download Resume</a>
+        <a class="button button-outline contact-download" href="assets/resume/noelNueve-resume.pdf" download>Download Resume</a>
       </section>
     </main>
   </div>

@@ -9,7 +9,6 @@
 </head>
 <body>
   <div class="site-shell">
-    <!-- NAVIGATION -->
     <header class="topbar">
       <nav class="nav-wrap" aria-label="Primary navigation">
         <a class="logo" href="../index.html#home"><span>//</span> NOEL.V</a>
@@ -32,7 +31,6 @@
         <div class="detail-inner">
           <a class="detail-back" href="../index.html#projects">← Back to Projects</a>
           <div class="detail-media detail-media-chexam">
-            <!-- Swappable asset: assets/projects/chexam-detail.jpg -->
             <img src="../assets/projects/chexam-detail.jpg" alt="Detailed view of the CHEXAM device" data-fallback="chexam-detail-placeholder">
             <div class="asset-placeholder" id="chexam-detail-placeholder" aria-hidden="true">
               <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m4 18 5-5 3 3 2-2 6 6"/></svg>
@@ -45,7 +43,7 @@
 
           <div class="detail-description">
             <h2>Overview</h2>
-            <p>Chexam is an offline exam-checking device built for schools and institutions with limited or no internet access. It automates grading for handwritten multiple choice, true/false, identification, and short essay questions using a Raspberry Pi 5, OCR, and a custom-trained YOLO model (Ultralytics 11N) to recognize handwritten letters (A–E, T, F). ArUco markers on the answer sheets allow the camera to reliably detect and align paper regardless of angle or lighting. After scanning both the answer key and a student’s paper, the device compares them and prints a receipt through a built-in thermal printer—either a detailed breakdown or a summary-only score, selected with a toggle.</p>
+            <p>Chexam is an offline exam-checking device built for schools and institutions with limited or no internet access. It automates grading for handwritten multiple choice, true/false, identification, and short essay questions using a Raspberry Pi 5, OCR, and a custom-trained YOLO model (Ultralytics 11N) to recognize handwritten letters (A–E, T, F). ArUco markers on the answer sheets allow the camera to reliably detect and align the paper regardless of angle or lighting. After scanning the answer key and a student’s paper, the device compares them and prints either a detailed breakdown or a summary-only score on a built-in thermal printer, selected with a toggle.</p>
 
             <h2 class="detail-kicker">Quantifiable Results</h2>
             <ul class="metrics-list">
@@ -59,7 +57,7 @@
 
             <section class="contribution-panel">
               <h2>My Contribution</h2>
-              <p>Programmed the core software—image capture, OCR/YOLO-based handwriting recognition, answer-key comparison, and scoring logic—and trained/fine-tuned the YOLO model on custom-labeled handwriting datasets collected specifically for this project.</p>
+              <p>I programmed the core software for image capture, OCR/YOLO-based handwriting recognition, answer-key comparison, and scoring. I also trained and fine-tuned the YOLO model using custom-labeled handwriting datasets collected for the project.</p>
             </section>
           </div>
         </div>
