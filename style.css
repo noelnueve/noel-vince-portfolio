@@ -143,13 +143,15 @@ main { padding-top: 60px; }
 .portrait-depth-one { z-index: -3; background: var(--grey-5); animation: portrait-depth-wave-one 3.8s ease-in-out infinite; }
 .portrait-depth-two { z-index: -2; background: var(--grey-4); animation: portrait-depth-wave-two 3.8s ease-in-out infinite; }
 .portrait-depth-three { z-index: -1; background: var(--grey-3); animation: portrait-depth-wave-three 3.8s ease-in-out infinite; }
-.portrait-frame { z-index: 1; width: var(--portrait-size); height: auto; aspect-ratio: 2 / 3; background: #222225; perspective: 900px; }
+.portrait-frame { z-index: 1; width: var(--portrait-size); height: auto; aspect-ratio: 2 / 3; background: #222225; cursor: pointer; perspective: 900px; }
+.portrait-frame:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 .portrait-frame img { filter: grayscale(100%); }
 .portrait-frame .hero-photo { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; backface-visibility: hidden; transform-origin: center; transition: opacity .65s ease, transform .75s cubic-bezier(.22, .61, .36, 1); }
 .hero-photo-dark { opacity: 1; transform: rotateY(0) scale(1); }
 .hero-photo-light { opacity: 0; transform: rotateY(-14deg) scale(.98); }
 body.light-theme .hero-photo-dark { opacity: 0; transform: rotateY(14deg) scale(.98); }
 body.light-theme .hero-photo-light { opacity: 1; filter: none; transform: rotateY(0) scale(1); }
+html.theme-transition .portrait-frame .hero-photo { transition: none; }
 .hello-note { position: absolute; z-index: 2; top: -32px; right: -60px; color: var(--heading); font-family: "Segoe Print", "Bradley Hand", cursive; font-size: 29px; line-height: 1; transform: rotate(-12deg); }
 
 @keyframes portrait-depth-wave-one {
@@ -265,20 +267,48 @@ body.light-theme .hero-photo-light { opacity: 1; filter: none; transform: rotate
   }
 }
 
+@supports (view-transition-name: none) {
+  html.theme-transition::view-transition-old(root) {
+    animation: theme-previous-view 720ms cubic-bezier(.45, 0, .2, 1) both;
+  }
+
+  html.theme-transition::view-transition-new(root) {
+    animation: theme-diagonal-reveal 720ms cubic-bezier(.45, 0, .2, 1) both;
+    mix-blend-mode: normal;
+  }
+}
+
+@keyframes theme-previous-view {
+  from { opacity: 1; }
+  to { opacity: .9; }
+}
+
+@keyframes theme-diagonal-reveal {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+    filter: blur(2px);
+    opacity: .78;
+  }
+  22% {
+    clip-path: polygon(0 0, 42% 0, 0 42%, 0 0);
+    filter: blur(1px);
+    opacity: .92;
+  }
+  100% {
+    clip-path: polygon(0 0, 150% 0, 100% 150%, 0 100%);
+    filter: none;
+    opacity: 1;
+  }
+}
+
 /* Hidden only after JavaScript initializes the reveal. */
 .content-reveal {
   opacity: 0;
   transform: translateY(16px);
-  will-change: transform, opacity;
 }
 
 .content-reveal.is-revealed {
   animation: content-reveal .65s cubic-bezier(.22, .8, .24, 1) var(--reveal-delay, 140ms) both;
-}
-
-.project-card.content-reveal.is-revealed:hover,
-.project-card.content-reveal.is-revealed:focus-visible {
-  transform: translateY(-6px) scale(1.03);
 }
 
 @keyframes content-reveal {

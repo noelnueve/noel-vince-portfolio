@@ -1,6 +1,10 @@
 const pageBody = document.body;
 const themeButtons = document.querySelectorAll("[data-theme]");
+const photoThemeToggle = document.querySelector(".portrait-frame");
 const themeStorageKey = "noel-portfolio-theme";
+const rootElement = document.documentElement;
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+let themeTransitionActive = false;
 const sectionNavLinks = [...document.querySelectorAll(".nav-links a")].filter((link) => (
   link.hash
   && link.origin === window.location.origin
@@ -17,6 +21,10 @@ const applyTheme = (theme) => {
   themeButtons.forEach((button) => {
     button.setAttribute("aria-pressed", String(button.dataset.theme === theme));
   });
+  photoThemeToggle?.setAttribute(
+    "aria-label",
+    `Switch to ${useLightTheme ? "dark" : "light"} theme`
+  );
 };
 
 const getSavedTheme = () => {
@@ -37,6 +45,47 @@ const saveTheme = (theme) => {
 
 applyTheme(getSavedTheme() === "light" ? "light" : "dark");
 
+const finishThemeTransition = () => {
+  rootElement.classList.remove("theme-transition");
+  themeTransitionActive = false;
+};
+
+const setTheme = (theme) => {
+  const currentTheme = pageBody.classList.contains("light-theme") ? "light" : "dark";
+  const canUseViewTransition = typeof document.startViewTransition === "function"
+    && !prefersReducedMotion.matches;
+
+  if (themeTransitionActive || theme === currentTheme) return;
+
+  const updateTheme = () => {
+    applyTheme(theme);
+    saveTheme(theme);
+  };
+
+  if (!canUseViewTransition) {
+    updateTheme();
+    return;
+  }
+
+  themeTransitionActive = true;
+  rootElement.classList.add("theme-transition");
+
+  try {
+    const transition = document.startViewTransition(updateTheme);
+
+    transition.finished.then(finishThemeTransition, finishThemeTransition);
+  } catch {
+    finishThemeTransition();
+    updateTheme();
+  }
+};
+
+const toggleTheme = () => {
+  const theme = pageBody.classList.contains("light-theme") ? "dark" : "light";
+
+  setTheme(theme);
+};
+
 document.querySelectorAll("img[data-fallback]").forEach((image) => {
   const showFallback = () => image.classList.add("is-missing");
 
@@ -49,11 +98,16 @@ document.querySelectorAll("img[data-fallback]").forEach((image) => {
 
 themeButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const theme = button.dataset.theme;
-
-    applyTheme(theme);
-    saveTheme(theme);
+    setTheme(button.dataset.theme);
   });
+});
+
+photoThemeToggle?.addEventListener("click", toggleTheme);
+photoThemeToggle?.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+
+  event.preventDefault();
+  toggleTheme();
 });
 
 if (trackedSections.length) {
@@ -115,6 +169,18 @@ revealTargets.forEach((target) => {
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
+
+    if (!prefersReducedMotion.matches) {
+      const finishReveal = (event) => {
+        if (event.target !== entry.target) return;
+
+        entry.target.classList.remove("content-reveal");
+        entry.target.style.removeProperty("--reveal-delay");
+        entry.target.removeEventListener("animationend", finishReveal);
+      };
+
+      entry.target.addEventListener("animationend", finishReveal);
+    }
 
     entry.target.classList.add("is-revealed");
     revealObserver.unobserve(entry.target);
