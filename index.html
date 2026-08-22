@@ -55,8 +55,12 @@
       <section class="hero" id="home">
         <div class="hero-content">
           <div class="portrait-wrap">
+            <span class="portrait-depth portrait-depth-one" aria-hidden="true"></span>
+            <span class="portrait-depth portrait-depth-two" aria-hidden="true"></span>
+            <span class="portrait-depth portrait-depth-three" aria-hidden="true"></span>
             <div class="asset-frame portrait-frame">
-              <img src="assets/profile/hero-photo.jpg" alt="Portrait of Noel V." data-fallback="portrait-placeholder">
+              <img class="hero-photo hero-photo-dark" src="assets/profile/hero-photo-dark.jpg" alt="Portrait of Noel V." data-fallback="portrait-placeholder">
+              <img class="hero-photo hero-photo-light" src="assets/profile/hero-photo-light.jpg" alt="" aria-hidden="true" data-fallback="portrait-placeholder">
               <div class="asset-placeholder portrait-placeholder" aria-hidden="true">
                 <svg><use href="#icon-user"/></svg>
                 <span>Portrait</span>
@@ -67,6 +71,32 @@
           <div class="hero-copy">
             <h1>It’s Noel,<br>your bug negotiator.</h1>
             <p>Computer Engineer</p><!-- TODO: swap for target role -->
+            <!-- Optional Spotify Easter egg: player is created only after visitor interaction. -->
+            <section class="music-drawer" id="music-drawer" aria-label="Music player">
+              <button class="music-toggle" id="music-toggle" type="button" aria-expanded="false" aria-controls="music-panel">
+                <span aria-hidden="true">♫</span>
+                <span class="music-toggle-text">Need a soundtrack? Play my favorite while you scroll.</span>
+              </button>
+                <div class="music-panel" id="music-panel" aria-hidden="true" inert>
+                <div class="music-now-playing">
+                  <div>
+                    <span class="music-eyebrow">Now Playing</span>
+                    <strong>Soft Spot</strong>
+                    <small>keshi</small>
+                  </div>
+                  <div class="music-equalizer" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+                </div>
+                <div class="music-controls">
+                  <button class="music-control" id="music-play" type="button" aria-label="Play Soft Spot by keshi" disabled>Play</button>
+                  <button class="music-collapse" id="music-collapse" type="button" aria-label="Collapse music player">↑</button>
+                </div>
+                <p class="music-status" id="music-status" aria-live="polite">Preparing Spotify player…</p>
+                <div class="spotify-embed-shell" id="spotify-embed-shell">
+                  <div id="spotify-embed" aria-label="Official Spotify player for Soft Spot by keshi"></div>
+                </div>
+                <a class="music-fallback" id="music-fallback" href="https://open.spotify.com/track/5pmITEphUtjpCLmKiYIPl9" target="_blank" rel="noreferrer" hidden>Open Soft Spot on Spotify ↗</a>
+              </div>
+            </section>
           </div>
         </div>
         <div class="hero-actions">
