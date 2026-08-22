@@ -47,69 +47,8 @@ const activeSectionObserver = new IntersectionObserver((entries) => {
 
 trackedSections.forEach((section) => activeSectionObserver.observe(section));
 
-const animatedHeadings = document.querySelectorAll(
-  ".section-heading h2, .detail-title, .detail-description h2, .contribution-panel h2, .detail-section h2"
-);
-
-const prepareHeadingWave = (heading) => {
-  const headingText = heading.textContent.replace(/\s+/g, " ").trim();
-  if (!headingText) return;
-
-  heading.setAttribute("aria-label", headingText);
-
-  const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
-  const textNodes = [];
-  let textNode = walker.nextNode();
-
-  while (textNode) {
-    textNodes.push(textNode);
-    textNode = walker.nextNode();
-  }
-
-  let letterIndex = 0;
-
-  textNodes.forEach((node) => {
-    const fragment = document.createDocumentFragment();
-    const waveText = document.createElement("span");
-
-    waveText.className = "wave-text";
-    waveText.setAttribute("aria-hidden", "true");
-
-    Array.from(node.nodeValue).forEach((character) => {
-      const letter = document.createElement("span");
-      const isSpace = /\s/.test(character);
-
-      letter.className = isSpace ? "wave-letter wave-letter--space" : "wave-letter";
-      letter.setAttribute("aria-hidden", "true");
-      letter.textContent = isSpace ? "\u00a0" : character;
-      letter.style.setProperty("--wave-delay", `${Math.min(letterIndex * 16, 200)}ms`);
-
-      if (!isSpace) letterIndex += 1;
-      waveText.append(letter);
-    });
-
-    fragment.append(waveText);
-    node.replaceWith(fragment);
-  });
-};
-
-animatedHeadings.forEach(prepareHeadingWave);
-
-const headingEntranceObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (!entry.isIntersecting) return;
-
-    entry.target.classList.add("heading-3d-enter");
-    headingEntranceObserver.unobserve(entry.target);
-  });
-}, {
-  threshold: 0.35
-});
-
-animatedHeadings.forEach((heading) => headingEntranceObserver.observe(heading));
-
 const contentRevealTargets = document.querySelectorAll(
-  ".text-section .lead-copy, .skill-card, .experience-card, .project-card, .education-card, .credential-row, .contact-grid a, .detail-media, p.detail-kicker, .detail-description > p, .metrics-list, .contribution-panel, .detail-section"
+  ".section-heading, .detail-title, .detail-description h2, .contribution-panel h2, .detail-section h2, .text-section .lead-copy, .skill-card, .experience-card, .project-card, .education-card, .credential-row, .contact-grid a, .detail-media, p.detail-kicker, .detail-description > p, .metrics-list, .contribution-panel, .detail-section"
 );
 
 const getRevealDelay = (target) => {

@@ -43,8 +43,8 @@ body.light-theme {
   --tag-bg: #ededf0;
   --accent: #2596be;
   --heading: #2596be;
-  --body: #2596be;
-  --subtle: #1c7799;
+  --body: #202024;
+  --subtle: #5b5b63;
   --border: #dddddf;
 }
 
@@ -100,6 +100,16 @@ svg { display: block; fill: none; stroke: currentColor; stroke-linecap: round; s
 
 .nav-links { display: flex; align-items: center; gap: 34px; height: 100%; }
 .nav-links a { position: relative; color: var(--body); font-size: clamp(9px, .55vw, 11px); line-height: 60px; letter-spacing: .12em; text-transform: uppercase; }
+.nav-links a[href]:not(.project-card),
+a.logo[href]:not(.project-card) { transition: text-shadow .25s ease; }
+.nav-links a[href]:not(.project-card):hover,
+.nav-links a[href]:not(.project-card):focus-visible,
+a.logo[href]:not(.project-card):hover,
+a.logo[href]:not(.project-card):focus-visible { transform: none; box-shadow: none; background: transparent; border-color: transparent; text-shadow: 0 2px 8px rgba(255, 255, 255, .18); }
+body.light-theme .nav-links a[href]:not(.project-card):hover,
+body.light-theme .nav-links a[href]:not(.project-card):focus-visible,
+body.light-theme a.logo[href]:not(.project-card):hover,
+body.light-theme a.logo[href]:not(.project-card):focus-visible { text-shadow: 0 2px 8px rgba(0, 0, 0, .18); }
 .nav-links a.active { color: var(--heading); }
 .nav-links a.active::after { content: ""; position: absolute; left: 50%; bottom: 15px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); transform: translateX(-50%); }
 
@@ -383,7 +393,7 @@ body.light-theme .hero-photo-light { filter: none; }
 .skill-card h3 svg { width: 16px; height: 16px; stroke-width: 2; }
 .tag-list { display: flex; flex-wrap: wrap; gap: 7px; }
 .tag-list span { padding: 5px 10px; border-radius: 3px; background: var(--tag-bg); color: #d5d5da; font-family: var(--font-mono); font-size: clamp(10px, .6vw, 11px); line-height: 1.2; white-space: nowrap; }
-body.light-theme .tag-list span { color: #2596be; }
+body.light-theme .tag-list span { color: #202024; }
 
 .experience-card, .education-card, .credential-row, .contact-grid a { border: 1px solid var(--border); border-radius: var(--radius); background: var(--panel-bg); }
 #experience { min-height: 780px; }
