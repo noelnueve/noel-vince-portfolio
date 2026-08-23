@@ -1,5 +1,5 @@
 const pageBody = document.body;
-const themeButtons = document.querySelectorAll("[data-theme]");
+const themeToggle = document.querySelector("[data-theme-toggle]");
 const photoThemeToggle = document.querySelector(".portrait-frame");
 const themeStorageKey = "noel-portfolio-theme";
 const rootElement = document.documentElement;
@@ -18,9 +18,11 @@ const applyTheme = (theme) => {
   const useLightTheme = theme === "light";
 
   pageBody.classList.toggle("light-theme", useLightTheme);
-  themeButtons.forEach((button) => {
-    button.setAttribute("aria-pressed", String(button.dataset.theme === theme));
-  });
+  themeToggle?.setAttribute("aria-pressed", String(useLightTheme));
+  themeToggle?.setAttribute(
+    "aria-label",
+    `Switch to ${useLightTheme ? "dark" : "light"} theme`
+  );
   photoThemeToggle?.setAttribute(
     "aria-label",
     `Switch to ${useLightTheme ? "dark" : "light"} theme`
@@ -96,11 +98,7 @@ document.querySelectorAll("img[data-fallback]").forEach((image) => {
   }
 });
 
-themeButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    setTheme(button.dataset.theme);
-  });
-});
+themeToggle?.addEventListener("click", toggleTheme);
 
 photoThemeToggle?.addEventListener("click", toggleTheme);
 photoThemeToggle?.addEventListener("keydown", (event) => {
@@ -192,180 +190,336 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 revealTargets.forEach((target) => revealObserver.observe(target));
 
+const audioPlayer = document.querySelector("#portfolio-audio");
+const topbarMusicToggle = document.querySelector("#topbar-music-toggle");
+const topbarVolumeInput = document.querySelector("#topbar-volume");
+const topbarVolumeControl = document.querySelector(".topbar-volume");
+const topbarVolumeButton = document.querySelector(".topbar-volume-button");
 const musicDrawer = document.querySelector("#music-drawer");
+const coffeeCompanion = document.querySelector("#coffee-companion");
+const coffeeButton = document.querySelector(".coffee-button");
+const musicStateKey = "noel-portfolio-music-state";
+const volumeStorageKey = "noel-portfolio-volume";
+const coffeeMessageStorageKey = "noel-portfolio-coffee-message-shown";
 
-if (musicDrawer) {
-  const spotifyTrackUrl = "https://open.spotify.com/track/5pmITEphUtjpCLmKiYIPl9";
+if (audioPlayer) {
   const musicToggle = document.querySelector("#music-toggle");
   const musicPanel = document.querySelector("#music-panel");
   const musicPlayButton = document.querySelector("#music-play");
   const musicCollapseButton = document.querySelector("#music-collapse");
   const musicStatus = document.querySelector("#music-status");
-  const spotifyEmbed = document.querySelector("#spotify-embed");
-  const musicFallback = document.querySelector("#music-fallback");
-  let spotifyController;
-  let spotifyApiPromise;
-  let playerInitializing = false;
-  let playerReady = false;
-  let playRequested = false;
-  let isPlaying = false;
+  const heroVolumeInput = document.querySelector("#hero-volume");
+  const heroVolumeValue = document.querySelector("#hero-volume-value");
+  const volumeInputs = [topbarVolumeInput, heroVolumeInput].filter(Boolean);
+  let coffeeMessageTimer;
+  let coffeeMessageHideTimer;
+  let hasShownCoffeeMessage = (() => {
+    try {
+      return window.sessionStorage.getItem(coffeeMessageStorageKey) === "true";
+    } catch {
+      return false;
+    }
+  })();
 
   const setMusicStatus = (message) => {
-    musicStatus.textContent = message;
+    if (musicStatus) musicStatus.textContent = message;
   };
 
+  const saveMusicState = () => {
+    try {
+      window.sessionStorage.setItem(musicStateKey, JSON.stringify({
+        currentTime: audioPlayer.currentTime,
+        wasPlaying: !audioPlayer.paused
+      }));
+    } catch {
+      // Playback remains available on the current page.
+    }
+  };
+
+  const getMusicState = () => {
+    try {
+      return JSON.parse(window.sessionStorage.getItem(musicStateKey)) || {};
+    } catch {
+      return {};
+    }
+  };
+
+  const getSavedVolume = () => {
+    try {
+      const storedVolume = window.localStorage.getItem(volumeStorageKey);
+      const savedVolume = Number(storedVolume);
+
+      return storedVolume !== null && Number.isFinite(savedVolume) && savedVolume >= 0 && savedVolume <= 1
+        ? savedVolume
+        : 0.3;
+    } catch {
+      return 0.3;
+    }
+  };
+
+  const syncVolumeControls = () => {
+    const percentage = Math.round(audioPlayer.volume * 100);
+
+    volumeInputs.forEach((input) => {
+      input.value = String(audioPlayer.volume);
+      input.setAttribute("aria-valuetext", `${percentage}%`);
+    });
+
+    if (heroVolumeValue) heroVolumeValue.value = `${percentage}%`;
+  };
+
+  const setTopbarVolumeExpanded = (expanded) => {
+    topbarVolumeControl?.classList.toggle("is-expanded", expanded);
+    topbarVolumeButton?.setAttribute("aria-expanded", String(expanded));
+  };
+
+  const supportsHover = window.matchMedia("(hover: hover)");
+
+  topbarVolumeButton?.addEventListener("click", () => {
+    if (supportsHover.matches) return;
+
+    const expanded = !topbarVolumeControl?.classList.contains("is-expanded");
+    setTopbarVolumeExpanded(expanded);
+
+    if (!expanded) topbarVolumeButton.blur();
+  });
+
+  topbarVolumeControl?.addEventListener("focusin", () => {
+    topbarVolumeButton?.setAttribute("aria-expanded", "true");
+  });
+
+  topbarVolumeControl?.addEventListener("focusout", () => {
+    window.setTimeout(() => {
+      if (!topbarVolumeControl.contains(document.activeElement)) {
+        topbarVolumeButton?.setAttribute("aria-expanded", "false");
+      }
+    }, 0);
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    if (!supportsHover.matches && !topbarVolumeControl?.contains(event.target)) {
+      setTopbarVolumeExpanded(false);
+
+      if (document.activeElement instanceof HTMLElement
+        && topbarVolumeControl?.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+    }
+  });
+
+  const setVolume = (value) => {
+    const volume = Math.min(1, Math.max(0, Number(value)));
+
+    if (!Number.isFinite(volume)) return;
+
+    audioPlayer.volume = volume;
+    syncVolumeControls();
+
+    try {
+      window.localStorage.setItem(volumeStorageKey, String(volume));
+    } catch {
+      // Volume remains active for the current page.
+    }
+  };
+
+  const popTopbarMusicControl = () => {
+    if (!topbarMusicToggle || prefersReducedMotion.matches) return;
+
+    topbarMusicToggle.classList.remove("is-popping");
+    void topbarMusicToggle.offsetWidth;
+    topbarMusicToggle.classList.add("is-popping");
+  };
+
+  const hideCoffeeMessage = () => {
+    if (!coffeeCompanion) return;
+
+    window.clearTimeout(coffeeMessageTimer);
+    window.clearTimeout(coffeeMessageHideTimer);
+    coffeeCompanion.classList.remove("is-message-visible");
+    coffeeCompanion.classList.remove("is-message-hiding");
+  };
+
+  const showCoffeeMessage = (delay = 0) => {
+    if (!coffeeCompanion) return;
+
+    hideCoffeeMessage();
+    coffeeMessageTimer = window.setTimeout(() => {
+      coffeeCompanion.classList.add("is-message-visible");
+      coffeeMessageHideTimer = window.setTimeout(() => {
+        coffeeCompanion.classList.remove("is-message-visible");
+        coffeeCompanion.classList.add("is-message-hiding");
+      }, 1800);
+    }, delay);
+  };
+
+  const showCoffee = () => {
+    if (!coffeeCompanion) return;
+
+    coffeeCompanion.classList.remove("is-exiting");
+    coffeeCompanion.classList.remove("is-visible");
+    void coffeeCompanion.offsetWidth;
+    coffeeCompanion.classList.add("is-visible", "is-grooving");
+
+    if (hasShownCoffeeMessage) return;
+
+    hasShownCoffeeMessage = true;
+    try {
+      window.sessionStorage.setItem(coffeeMessageStorageKey, "true");
+    } catch {}
+    showCoffeeMessage(150);
+  };
+
+  const hideCoffee = () => {
+    if (!coffeeCompanion || !coffeeCompanion.classList.contains("is-visible")) return;
+
+    hideCoffeeMessage();
+    if (prefersReducedMotion.matches) {
+      coffeeCompanion.classList.remove("is-grooving", "is-exiting", "is-visible");
+      return;
+    }
+
+    coffeeCompanion.classList.remove("is-grooving");
+    coffeeCompanion.classList.add("is-exiting");
+  };
+
+  coffeeCompanion?.addEventListener("animationend", (event) => {
+    if (event.target !== coffeeCompanion || event.animationName !== "coffee-exit") return;
+
+    coffeeCompanion.classList.remove("is-exiting", "is-visible");
+  });
+
+  coffeeButton?.addEventListener("click", () => {
+    if (coffeeCompanion?.classList.contains("is-visible")) {
+      showCoffeeMessage();
+    }
+  });
+
   const setPlaying = (playing) => {
-    isPlaying = playing;
-    musicDrawer.classList.toggle("is-playing", playing);
-    musicPlayButton.textContent = playing ? "Pause" : "Play";
-    musicPlayButton.setAttribute(
+    topbarMusicToggle?.classList.toggle("is-playing", playing);
+    topbarMusicToggle?.setAttribute("aria-pressed", String(playing));
+    topbarMusicToggle?.setAttribute(
       "aria-label",
-      `${playing ? "Pause" : "Play"} Soft Spot by keshi`
+      `${playing ? "Pause" : "Play"} background music`
     );
+
+    const topbarLabel = topbarMusicToggle?.querySelector(".topbar-music-label");
+    if (topbarLabel) topbarLabel.textContent = playing ? "Pause" : "Play";
+
+    musicDrawer?.classList.toggle("is-playing", playing);
+    if (musicPlayButton) {
+      musicPlayButton.textContent = playing ? "Pause" : "Play";
+      musicPlayButton.setAttribute(
+        "aria-label",
+        `${playing ? "Pause" : "Play"} Cool Jazz Loops`
+      );
+    }
+
+    if (playing) {
+      showCoffee();
+    } else {
+      hideCoffee();
+    }
   };
 
   const setExpanded = (expanded) => {
+    if (!musicDrawer || !musicToggle || !musicPanel) return;
+
     musicDrawer.classList.toggle("is-expanded", expanded);
     musicToggle.setAttribute("aria-expanded", String(expanded));
     musicPanel.setAttribute("aria-hidden", String(!expanded));
     musicPanel.toggleAttribute("inert", !expanded);
   };
 
-  const showFallback = () => {
-    musicDrawer.classList.add("has-error");
-    musicFallback.hidden = false;
-    musicPlayButton.disabled = true;
-    setMusicStatus("Spotify could not load here. Use the official Spotify link instead.");
-  };
-
-  const loadSpotifyApi = () => {
-    if (spotifyApiPromise) return spotifyApiPromise;
-
-    spotifyApiPromise = new Promise((resolve, reject) => {
-      const existingScript = document.querySelector("script[data-spotify-iframe-api]");
-      const timeout = window.setTimeout(() => reject(new Error("Spotify API timeout")), 10000);
-      const previousReadyHandler = window.onSpotifyIframeApiReady;
-
-      window.onSpotifyIframeApiReady = (iframeApi) => {
-        window.clearTimeout(timeout);
-        previousReadyHandler?.(iframeApi);
-        resolve(iframeApi);
-      };
-
-      if (existingScript) return;
-
-      const spotifyScript = document.createElement("script");
-      spotifyScript.src = "https://open.spotify.com/embed/iframe-api/v1";
-      spotifyScript.async = true;
-      spotifyScript.dataset.spotifyIframeApi = "true";
-      spotifyScript.addEventListener("error", () => {
-        window.clearTimeout(timeout);
-        reject(new Error("Spotify API failed to load"));
-      }, { once: true });
-      document.body.append(spotifyScript);
-    });
-
-    return spotifyApiPromise;
-  };
-
-  const requestPlayback = () => {
-    if (!spotifyController) return;
-
+  const playAudio = async (isRestoring = false) => {
     try {
-      spotifyController.resume();
-      setMusicStatus("Starting playback…");
+      await audioPlayer.play();
+      if (!isRestoring) setMusicStatus("Playing Cool Jazz Loops.");
     } catch {
-      setMusicStatus("Use the official Spotify controls below to start playback.");
+      setPlaying(false);
+      setMusicStatus("Press play to continue the music.");
     }
   };
 
-  const initializePlayer = async () => {
-    if (playerReady || spotifyController || playerInitializing) return;
-
-    playerInitializing = true;
-    musicPlayButton.disabled = true;
-    setMusicStatus("Loading official Spotify player…");
-
-    try {
-      const iframeApi = await loadSpotifyApi();
-
-      iframeApi.createController(spotifyEmbed, {
-        url: spotifyTrackUrl,
-        width: "100%",
-        height: 80
-      }, (controller) => {
-        spotifyController = controller;
-        playerInitializing = false;
-        playerReady = true;
-        musicPlayButton.disabled = false;
-        setMusicStatus("Official Spotify player ready.");
-
-        controller.addListener("playback_update", (event) => {
-          const playing = !event.data.isPaused;
-          setPlaying(playing);
-          setMusicStatus(playing ? "Playing from Spotify." : "Paused.");
-        });
-
-        if (musicDrawer.classList.contains("is-expanded") && playRequested) {
-          requestPlayback();
-        }
-      });
-    } catch {
-      playerInitializing = false;
-      showFallback();
-    }
+  const pauseAudio = () => {
+    audioPlayer.pause();
+    setMusicStatus("Paused.");
   };
 
-  const openPlayer = () => {
-    setExpanded(true);
-    playRequested = true;
+  const restoreMusic = () => {
+    const { currentTime, wasPlaying } = getMusicState();
 
-    if (playerReady) {
-      requestPlayback();
-    } else {
-      initializePlayer();
+    if (Number.isFinite(currentTime) && currentTime > 0) {
+      audioPlayer.currentTime = currentTime;
     }
+
+    if (wasPlaying) playAudio(true);
   };
 
-  const collapsePlayer = () => {
-    playRequested = false;
-    setExpanded(false);
+  audioPlayer.addEventListener("play", () => {
+    setPlaying(true);
+    popTopbarMusicControl();
+    saveMusicState();
+  });
 
-    if (spotifyController) {
-      try {
-        spotifyController.pause();
-      } catch {
-        // Native Spotify controls remain available.
-      }
-    }
-
+  audioPlayer.addEventListener("pause", () => {
     setPlaying(false);
-  };
+    saveMusicState();
+  });
 
-  musicToggle.addEventListener("click", () => {
-    if (musicDrawer.classList.contains("is-expanded")) {
-      collapsePlayer();
+  audioPlayer.addEventListener("ended", () => {
+    setPlaying(false);
+    saveMusicState();
+    setMusicStatus("Finished playing.");
+  });
+
+  audioPlayer.addEventListener("error", () => {
+    setMusicStatus("Music file could not be loaded.");
+  });
+
+  audioPlayer.addEventListener("volumechange", syncVolumeControls);
+
+  volumeInputs.forEach((input) => {
+    input.addEventListener("input", () => setVolume(input.value));
+  });
+
+  setVolume(getSavedVolume());
+
+  if (audioPlayer.readyState >= 1) {
+    restoreMusic();
+  } else {
+    audioPlayer.addEventListener("loadedmetadata", restoreMusic, { once: true });
+  }
+  window.addEventListener("pagehide", saveMusicState);
+
+  topbarMusicToggle?.addEventListener("click", () => {
+    if (audioPlayer.paused) {
+      playAudio();
+    } else {
+      pauseAudio();
+    }
+  });
+
+  musicToggle?.addEventListener("click", () => {
+    if (musicDrawer?.classList.contains("is-expanded")) {
+      setExpanded(false);
+      pauseAudio();
       return;
     }
 
-    openPlayer();
+    setExpanded(true);
+    playAudio();
   });
 
-  musicPlayButton.addEventListener("click", () => {
-    if (!playerReady) return;
-
-    if (isPlaying) {
-      try {
-        spotifyController.pause();
-      } catch {
-        setMusicStatus("Use the official Spotify controls below to pause playback.");
-      }
-      return;
+  musicPlayButton?.addEventListener("click", () => {
+    if (audioPlayer.paused) {
+      playAudio();
+    } else {
+      pauseAudio();
     }
-
-    playRequested = true;
-    requestPlayback();
   });
 
-  musicCollapseButton.addEventListener("click", collapsePlayer);
+  musicCollapseButton?.addEventListener("click", () => {
+    setExpanded(false);
+    pauseAudio();
+  });
 }

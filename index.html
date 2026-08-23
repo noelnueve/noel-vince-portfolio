@@ -38,12 +38,27 @@
           <a href="#about">About</a>
           <a href="#skills">Skills</a>
           <a href="#experience">Experience</a>
-          <a class="active" href="#projects">Projects</a>
+          <a href="#projects">Projects</a>
           <a href="#contact">Contact</a>
         </div>
         <div class="theme-controls" aria-label="Theme controls">
-          <button class="icon-button" type="button" data-theme="light" aria-label="Use light theme"><svg><use href="#icon-sun"/></svg></button>
-          <button class="icon-button" type="button" data-theme="dark" aria-label="Use dark theme"><svg><use href="#icon-moon"/></svg></button>
+          <button class="topbar-music-toggle" id="topbar-music-toggle" type="button" aria-label="Play background music" aria-pressed="false">
+            <span class="topbar-music-label">Play</span>
+            <span class="topbar-equalizer" aria-hidden="true"><i></i><i></i><i></i></span>
+          </button>
+          <div class="topbar-volume">
+            <button class="topbar-volume-button" type="button" aria-label="Adjust music volume" aria-expanded="false" aria-controls="topbar-volume">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4Z"/><path d="M16 9.5a4 4 0 0 1 0 5M19 7a7 7 0 0 1 0 10"/></svg>
+            </button>
+            <label class="topbar-volume-panel">
+              <span class="sr-only">Music volume</span>
+              <input id="topbar-volume" type="range" min="0" max="1" step="0.01" value="0.3" aria-label="Music volume">
+            </label>
+          </div>
+          <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme" aria-pressed="false">
+            <svg class="theme-icon theme-icon-sun" aria-hidden="true"><use href="#icon-sun"/></svg>
+            <svg class="theme-icon theme-icon-moon" aria-hidden="true"><use href="#icon-moon"/></svg>
+          </button>
         </div>
       </nav>
     </header>
@@ -56,8 +71,8 @@
             <span class="portrait-depth portrait-depth-two" aria-hidden="true"></span>
             <span class="portrait-depth portrait-depth-three" aria-hidden="true"></span>
             <div class="asset-frame portrait-frame" role="button" tabindex="0" aria-label="Switch to light theme">
-              <img class="hero-photo hero-photo-dark" src="assets/profile/hero-photo-dark.jpg" alt="Portrait of Noel V." width="1366" height="2049" data-fallback="portrait-placeholder">
-              <img class="hero-photo hero-photo-light" src="assets/profile/hero-photo-light.jpg" alt="" width="1366" height="2049" aria-hidden="true" data-fallback="portrait-placeholder">
+              <img class="hero-photo hero-photo-dark" src="assets/profile/hero-photo-dark.jpg" alt="Portrait of Noel V." data-fallback="portrait-placeholder">
+              <img class="hero-photo hero-photo-light" src="assets/profile/hero-photo-light.jpg" alt="" aria-hidden="true" data-fallback="portrait-placeholder">
               <div class="asset-placeholder portrait-placeholder" aria-hidden="true">
                 <svg><use href="#icon-user"/></svg>
                 <span>Portrait</span>
@@ -66,31 +81,41 @@
             <span class="hello-note">Ciao!</span>
           </div>
           <div class="hero-copy">
-            <h1>It’s Noel,<br>your bug negotiator.</h1>
+            <h1>It’s Noel!<br>stay a while, scroll around.</h1>
             <p>Computer Engineer</p>
+            <nav class="hero-contact-links" aria-label="Quick contact">
+              <a href="mailto:noel.nueve30@gmail.com">Email</a>
+              <span aria-hidden="true">/</span>
+              <a href="https://github.com/noelnueve" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <span aria-hidden="true">/</span>
+              <a href="https://www.linkedin.com/in/noelnueve" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <span aria-hidden="true">/</span>
+              <a href="#contact">Contact</a>
+            </nav>
             <section class="music-drawer" id="music-drawer" aria-label="Music player">
               <button class="music-toggle" id="music-toggle" type="button" aria-expanded="false" aria-controls="music-panel">
                 <span aria-hidden="true">♫</span>
-                <span class="music-toggle-text">Need a soundtrack? Play my favorite while you scroll.</span>
+                <span class="music-toggle-text">A little music for the scroll.</span>
               </button>
               <div class="music-panel" id="music-panel" aria-hidden="true" inert>
                 <div class="music-now-playing">
                   <div>
                     <span class="music-eyebrow">Now Playing</span>
-                    <strong>Soft Spot</strong>
-                    <small>keshi</small>
+                    <strong>Cool Jazz Loops</strong>
+                    <small>Instrumental</small>
                   </div>
                   <div class="music-equalizer" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
                 </div>
                 <div class="music-controls">
-                  <button class="music-control" id="music-play" type="button" aria-label="Play Soft Spot by keshi" disabled>Play</button>
+                  <button class="music-control" id="music-play" type="button" aria-label="Play Cool Jazz Loops">Play</button>
                   <button class="music-collapse" id="music-collapse" type="button" aria-label="Collapse music player">↑</button>
                 </div>
-                <p class="music-status" id="music-status" aria-live="polite">Preparing Spotify player…</p>
-                <div class="spotify-embed-shell" id="spotify-embed-shell">
-                  <div id="spotify-embed" aria-label="Official Spotify player for Soft Spot by keshi"></div>
-                </div>
-                <a class="music-fallback" id="music-fallback" href="https://open.spotify.com/track/5pmITEphUtjpCLmKiYIPl9" target="_blank" rel="noopener noreferrer" hidden>Open Soft Spot on Spotify ↗</a>
+                <label class="music-volume">
+                  <span>Volume</span>
+                  <input id="hero-volume" type="range" min="0" max="1" step="0.01" value="0.3" aria-label="Music volume">
+                  <output id="hero-volume-value" for="hero-volume">30%</output>
+                </label>
+                <p class="music-status" id="music-status" aria-live="polite">Ready to play.</p>
               </div>
             </section>
           </div>
@@ -104,9 +129,13 @@
       <section class="content-section text-section" id="about">
         <div class="section-heading">
           <div class="section-index"><span></span><b>01</b></div>
-          <h2>About / Objective</h2>
+          <h2>About Me</h2>
         </div>
-        <p class="lead-copy">I’m looking for a Software Developer role where I can apply my background in software development, embedded systems, and computer vision, continue building my skills, and contribute to the team’s projects.</p>
+        <div class="lead-copy">
+          <p>I started out more focused on embedded systems, where I learned how software and hardware come together to make something work. As I kept building projects, I found myself becoming more interested in the software side, especially the part where an idea turns into something people can actually see and interact with.</p>
+          <p>I’m a very visual learner, so I naturally enjoy interfaces, animations, clean layouts, and small interactive details. I like taking something I can picture in my head and figuring out how to make it real through code.</p>
+          <p>Right now, I’m continuing to grow into software development while bringing with me what I’ve learned from embedded systems and computer vision. I’m still learning, but I enjoy the process of building, experimenting, and seeing an idea slowly become a working system.</p>
+        </div>
       </section>
 
       <section class="content-section text-section" id="summary">
@@ -175,7 +204,7 @@
         <div class="project-grid">
           <a class="project-card" href="projects/tela-sorb.html" aria-label="View TELA-SORB project details">
             <div class="project-image asset-frame">
-              <img src="assets/projects/tela-sorb.png" alt="TELA-SORB project" width="492" height="365" loading="lazy" decoding="async" data-fallback="project-placeholder-one">
+              <img src="assets/projects/tela-sorb.png" alt="TELA-SORB project" data-fallback="project-placeholder-one">
               <div class="asset-placeholder" id="project-placeholder-one" aria-hidden="true"><svg><use href="#icon-image"/></svg><span>Project Photo</span></div>
             </div>
             <div class="project-body">
@@ -187,7 +216,7 @@
           </a>
           <a class="project-card" href="projects/chexam.html" aria-label="View CHEXAM project details">
             <div class="project-image asset-frame">
-              <img src="assets/projects/chexam.png" alt="CHEXAM project" width="531" height="470" loading="lazy" decoding="async" data-fallback="project-placeholder-two">
+              <img src="assets/projects/chexam.png" alt="CHEXAM project" data-fallback="project-placeholder-two">
               <div class="asset-placeholder" id="project-placeholder-two" aria-hidden="true"><svg><use href="#icon-image"/></svg><span>Project Photo</span></div>
             </div>
             <div class="project-body">
@@ -283,11 +312,11 @@
             <span class="round-icon"><svg><use href="#icon-phone"/></svg></span>
             <div><b>Phone</b><small>+63 966 835 1070</small></div>
           </a>
-          <a href="https://github.com/noelnueve" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/noelnueve" target="_blank" rel="noreferrer">
             <span class="round-icon"><svg><use href="#icon-github"/></svg></span>
             <div><b>GitHub</b><small>github.com/noelnueve</small></div>
           </a>
-          <a href="https://www.linkedin.com/in/noelnueve" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.linkedin.com/in/noelnueve" target="_blank" rel="noreferrer">
             <span class="round-icon"><svg><use href="#icon-linkedin"/></svg></span>
             <div><b>LinkedIn</b><small>linkedin.com/in/noelnueve</small></div>
           </a>
@@ -296,6 +325,15 @@
       </section>
     </main>
   </div>
+  <audio id="portfolio-audio" preload="metadata">
+    <source src="assets/music/coolJazzLoops.mp3" type="audio/mpeg">
+  </audio>
+  <aside class="coffee-companion" id="coffee-companion">
+    <p class="coffee-message">Great music, eh? Have some coffee as well!</p>
+    <button class="coffee-button" type="button" aria-label="Show coffee message">
+      <img class="coffee-image" src="assets/coffeeAnimation/coffeeMusicAnimation.png" alt="">
+    </button>
+  </aside>
 
   <script src="script.js"></script>
 </body>

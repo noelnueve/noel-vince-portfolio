@@ -20,8 +20,23 @@
           <a href="../index.html#contact">Contact</a>
         </div>
         <div class="theme-controls" aria-label="Theme controls">
-          <button class="icon-button" type="button" data-theme="light" aria-label="Use light theme"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg></button>
-          <button class="icon-button" type="button" data-theme="dark" aria-label="Use dark theme"><svg viewBox="0 0 24 24"><path d="M20 15.2A8.6 8.6 0 0 1 8.8 4a8.6 8.6 0 1 0 11.2 11.2Z"/></svg></button>
+          <button class="topbar-music-toggle" id="topbar-music-toggle" type="button" aria-label="Play background music" aria-pressed="false">
+            <span class="topbar-music-label">Play</span>
+            <span class="topbar-equalizer" aria-hidden="true"><i></i><i></i><i></i></span>
+          </button>
+          <div class="topbar-volume">
+            <button class="topbar-volume-button" type="button" aria-label="Adjust music volume" aria-expanded="false" aria-controls="topbar-volume">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4Z"/><path d="M16 9.5a4 4 0 0 1 0 5M19 7a7 7 0 0 1 0 10"/></svg>
+            </button>
+            <label class="topbar-volume-panel">
+              <span class="sr-only">Music volume</span>
+              <input id="topbar-volume" type="range" min="0" max="1" step="0.01" value="0.3" aria-label="Music volume">
+            </label>
+          </div>
+          <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme" aria-pressed="false">
+            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>
+            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.6 8.6 0 0 1 8.8 4a8.6 8.6 0 1 0 11.2 11.2Z"/></svg>
+          </button>
         </div>
       </nav>
     </header>
@@ -64,6 +79,15 @@
       </article>
     </main>
   </div>
+  <audio id="portfolio-audio" preload="metadata">
+    <source src="../assets/music/coolJazzLoops.mp3" type="audio/mpeg">
+  </audio>
+  <aside class="coffee-companion" id="coffee-companion">
+    <p class="coffee-message">Great music, eh? Have some coffee as well!</p>
+    <button class="coffee-button" type="button" aria-label="Show coffee message">
+      <img class="coffee-image" src="../assets/coffeeAnimation/coffeeMusicAnimation.png" alt="">
+    </button>
+  </aside>
   <script src="../script.js"></script>
 </body>
 </html>
